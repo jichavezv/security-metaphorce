@@ -40,9 +40,6 @@ public class AuthenticationController {
 	
 	@Autowired
     private AuthenticationManager authenticationManager;
-	
-	@Autowired
-	private UserMapper mapper;
 
 	/**
 	 * Endpoint for test 
@@ -66,10 +63,10 @@ public class AuthenticationController {
 	public ResponseEntity<UserAuthDTO> register(@Valid @RequestBody UserAuthDTO registerUserDto) {
 		log.info("User to register: " + registerUserDto);
 		ResponseEntity<UserAuthDTO> response = null;
-		User registeredUser = authenticationService.signUp(mapper.dtoToEntity(registerUserDto));
+		User registeredUser = authenticationService.signUp(UserMapper.INSTANCE.dtoToEntity(registerUserDto));
 		
 		if(registeredUser != null) {
-			response = ResponseEntity.ok(mapper.entityToDto(registeredUser));
+			response = ResponseEntity.ok(UserMapper.INSTANCE.entityToDto(registeredUser));
 			log.info("User registered: " + registeredUser);
 		} else {
 			response = ResponseEntity.badRequest().build();
