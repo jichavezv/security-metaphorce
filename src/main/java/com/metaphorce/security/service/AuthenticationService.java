@@ -13,25 +13,28 @@ import com.metaphorce.security.mapper.UserMapper;
 import com.metaphorce.security.model.User;
 import com.metaphorce.security.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 /**
  * Service for operations on Authentication
  * @author Juan Chavez
  * @since May/28/2024
  */
 @Service
+@Transactional
 public class AuthenticationService implements UserDetailsService {
 	@Autowired
     private UserRepository repository;
         
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+    	    
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
 		Optional<User> userDetails = repository.findByName(username);
 		
-		return userDetails.map(UserMapper.INSTANCE::entityToDto)
+		return userDetails.map(UserMapper.MAPPER::entityToDto)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
 	}
 	
